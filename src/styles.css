@@ -1,0 +1,4 @@
+:root { font-family: "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; background: #f6f1e7; color: #303d36; }
+* { box-sizing: border-box; }
+body { margin: 0; }
+main { max-width: 480px; margin: 0 auto; padding: 40px 24px; }
