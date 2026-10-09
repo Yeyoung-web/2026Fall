@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useState } from 'react'
+import PhotoSection from './components/PhotoSection'
 import MeetingForm from './components/MeetingForm'
-import { loadData, resetData, saveMember, saveRoom, updateMeeting } from './data/storage'
-import { dateLabel, displayRoomName, shouldSuggestName, won, type Member, type Meeting, type Room } from './data/models'
+import { getPhotos, loadData, resetData, saveMember, saveRoom, updateMeeting } from './data/storage'
+import { dateLabel, displayRoomName, shouldSuggestName, won, type Member, type Meeting, type Photo, type Room } from './data/models'
 import { settle } from './engine/settlement'
 
 type Data = { members: Member[]; rooms: Room[]; meetings: Meeting[] }
@@ -58,9 +59,13 @@ function NamingPrompt({ room, onSave }: { room: Room; onSave: (r: Room) => void 
 }
 function MemoryEntry({ meeting, members, actor, onChange }: { meeting: Meeting; members: Member[]; actor: string; onChange: (work: () => Promise<unknown>, message?: string) => Promise<void> }) {
   const [comment, setComment] = useState('')
+  const [photos, setPhotos] = useState<Photo[]>([])
+  const refreshPhotos = useCallback(async () => { setPhotos(await getPhotos(meeting.id)) }, [meeting.id])
+  useEffect(() => { void refreshPhotos().catch(() => undefined) }, [refreshPhotos])
   const total = meeting.expenses.reduce((sum, e) => sum + e.amount, 0)
   const { balances } = settle(members.map(m => m.id), meeting.expenses)
   return <article className="memory-entry"><div className="simple-receipt"><p className="eyebrow">{dateLabel(meeting.date)}</p><h2>{meeting.title}</h2><p>{members.map(m => m.emoji + ' ' + m.name).join(' · ')}</p><div className="dashed" />{meeting.expenses.map(e => <p className="expense-line" key={e.id}><span>{e.place}</span><small>{won(e.amount)}원</small></p>)}<div className="dashed" /><p className="expense-line"><span>함께한 하루</span><small>총 {won(total)}원</small></p><p className="hint">{balances.map(b => `${members.find(m => m.id === b.memberId)?.name} ${won(b.owed)}원`).join(' · ')}</p></div>
+    <PhotoSection meeting={meeting} members={members} actor={actor} photos={photos} onRefresh={refreshPhotos} onChange={onChange} />
     <div className="reactions">{['♡', '🥹', '😂', '✨'].map(emoji => <button key={emoji} className={meeting.reactions[emoji]?.includes(actor) ? 'reacted' : ''} aria-label={`${emoji} 반응`} aria-pressed={meeting.reactions[emoji]?.includes(actor) ?? false} onClick={() => void onChange(() => updateMeeting(meeting.id, current => { const list = current.reactions[emoji] ?? []; return { ...current, reactions: { ...current.reactions, [emoji]: list.includes(actor) ? list.filter(id => id !== actor) : [...list, actor] } } }))}>{emoji} <small>{meeting.reactions[emoji]?.length || ''}</small></button>)}</div>
     <div className="comments">{meeting.comments.map(c => <p key={c.id}><strong>{members.find(m => m.id === c.memberId)?.name}</strong> {c.text}</p>)}</div><form className="comment-form" onSubmit={e => { e.preventDefault(); if (comment.trim()) { void onChange(() => updateMeeting(meeting.id, current => ({ ...current, comments: [...current.comments, { id: crypto.randomUUID(), memberId: actor, text: comment.trim(), at: new Date().toISOString() }] }))); setComment('') } }}><input aria-label={`${meeting.title}에 짧은 댓글`} maxLength={100} placeholder="이날의 마음을 한 줄로 남겨요" value={comment} onChange={e => setComment(e.target.value)} /><button aria-label="댓글 남기기">↑</button></form>
   </article>
