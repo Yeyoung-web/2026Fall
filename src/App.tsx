@@ -1,4 +1,6 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { FilmAlbum, YearReview } from './components/FilmAlbum'
+import PhotoBoothSection from './components/PhotoBoothSection'
 import RouteMap from './components/RouteMap'
 import MemoryReceipt from './components/MemoryReceipt'
 import { buildDemo, demoIllustration } from './data/demo'
@@ -12,6 +14,7 @@ export default function App() {
   const [data, setData] = useState<Data>({ members: [], rooms: [], meetings: [] })
   const [loading, setLoading] = useState(true), [error, setError] = useState(''), [notice, setNotice] = useState('')
   const [roomId, setRoomId] = useState<string>(), [newMeeting, setNewMeeting] = useState(false)
+  const [roomTab, setRoomTab] = useState<'feed' | 'films' | 'year'>('feed')
   const [activeMember, setActiveMember] = useState('a'), [tab, setTab] = useState<'rooms' | 'memories'>('rooms')
   const [settings, setSettings] = useState(false), [reset, setReset] = useState(false)
   const refresh = useCallback(async () => {
@@ -23,7 +26,7 @@ export default function App() {
     try { await work(); await refresh(); if (message) setNotice(message) } catch (e) { setError(e instanceof Error ? e.message : '저장하지 못했어요. 저장 공간을 확인해 주세요.') }
   }
   const room = data.rooms.find(r => r.id === roomId)
-  const visible = room ? data.meetings.filter(m => m.roomId === room.id) : data.meetings
+  const visible = useMemo(() => room ? data.meetings.filter(m => m.roomId === room.id) : data.meetings, [room, data.meetings])
   const member = data.members.find(m => m.id === activeMember)
   return <><header className="site-header"><button className="brand" aria-label="Receiptory 리시토리 홈" onClick={() => { setRoomId(undefined); setTab('rooms') }}><span className="brand-mark">r.</span>receiptory<span className="brand-dot">✳</span></button><button className="profile-button" onClick={() => setSettings(true)} aria-label="친구와 계좌 설정">{member?.emoji ?? '🐰'}<span>우리의 프로필</span></button></header>
     <main className={room ? 'room-main' : ''}>
@@ -31,8 +34,9 @@ export default function App() {
       {room ? <><button className="text-button back" onClick={() => setRoomId(undefined)}>← 기록방으로</button><p className="eyebrow">OUR LITTLE ARCHIVE</p><h1 className="room-title">{displayRoomName(room, data.members)}</h1><p className="muted">{room.memberIds.map(id => data.members.find(m => m.id === id)?.emoji).join(' ')} · 함께한 {visible.length}번의 하루</p>
         {shouldSuggestName(room, data.meetings) && <NamingPrompt room={room} onSave={r => action(() => saveRoom(r))} />}
         <div className="section-heading"><h2>함께 쌓은 추억</h2><button className="primary compact" onClick={() => setNewMeeting(true)}>＋ 만남 기록</button></div>
-        <Actor members={data.members.filter(m => room.memberIds.includes(m.id))} active={activeMember} onChange={setActiveMember} />
-        <div className="feed">{visible.map(m => <MemoryEntry key={m.id} meeting={m} members={data.members.filter(member => room.memberIds.includes(member.id))} actor={room.memberIds.includes(activeMember) ? activeMember : room.memberIds[0]} onChange={action} />)}</div>
+        <nav className="room-tabs" aria-label="기록방 보기"><button aria-pressed={roomTab === 'feed'} className={roomTab === 'feed' ? 'active' : ''} onClick={() => setRoomTab('feed')}>추억 영수증</button><button aria-pressed={roomTab === 'films'} className={roomTab === 'films' ? 'active' : ''} onClick={() => setRoomTab('films')}>네컷 모아보기</button><button aria-pressed={roomTab === 'year'} className={roomTab === 'year' ? 'active' : ''} onClick={() => setRoomTab('year')}>연말 결산</button></nav>
+        {roomTab === 'films' ? <FilmAlbum meetings={visible} /> : roomTab === 'year' ? <YearReview meetings={visible} /> : <><Actor members={data.members.filter(m => room.memberIds.includes(m.id))} active={activeMember} onChange={setActiveMember} />
+        <div className="feed">{visible.map(m => <MemoryEntry key={m.id} meeting={m} members={data.members.filter(member => room.memberIds.includes(member.id))} actor={room.memberIds.includes(activeMember) ? activeMember : room.memberIds[0]} onChange={action} />)}</div></>}
       </> : <>
         <section className="hero"><div className="hero-copy"><p className="eyebrow"><span className="tiny-star">✳</span> LITTLE MOMENTS, LONG MEMORIES</p><h1>정산하면,<br /><span>추억이 된다.</span></h1><p className="hero-description">계산은 가볍게, 기억은 오래.<br />친구들과 보낸 하루를 한 장의 영수증에 담아요.</p><button className="primary" disabled={loading} onClick={() => setNewMeeting(true)}>＋ 새로운 만남 기록하기 <span>↗</span></button><p className="hero-note">Every receipt has a story.</p></div>
         <div className="hero-visual" aria-label="감성 영수증 디자인 예시"><span className="float-note note-top">a day worth keeping ♡</span><div className="sample-receipt"><div className="receipt-brand">RECEIPTORY</div><p className="receipt-subtitle">기억하고 싶은 하루의 영수증</p><div className="sample-photo"><img src={`data:image/svg+xml;charset=utf-8,${encodeURIComponent(demoIllustration('coffee'))}`} alt="카페에서의 따뜻한 하루 일러스트" /></div><h3>커피는 식어도,<br />우리의 이야기는 따뜻해.</h3><div className="dashed" /><p className="sample-line"><span>함께 웃은 시간</span><span>측정 불가</span></p><p className="sample-line"><span>다음에 또 만날 약속</span><span>1개</span></p><div className="dashed" /><div className="barcode" /><p className="receipt-subtitle">FOR THE MEMORIES, NOT THE MONEY</p></div><span className="float-note note-bottom">✳ keep this feeling</span><span className="hero-flower">✺</span></div></section>
@@ -40,14 +44,14 @@ export default function App() {
         <div className="section-heading archive-heading"><div><p className="eyebrow">COLLECTED WITH LOVE</p><h2>{tab === 'rooms' ? '우리의 기록방' : '모든 추억'}</h2></div><div className="view-tabs"><button className={tab === 'rooms' ? 'active' : ''} onClick={() => setTab('rooms')}>기록방</button><button className={tab === 'memories' ? 'active' : ''} onClick={() => setTab('memories')}>추억 모아보기</button></div></div>
         {loading ? <p className="empty">기억을 꺼내는 중…</p> : tab === 'rooms' ? <div className="room-grid">{data.rooms.map((r, index) => {
           const meetings = data.meetings.filter(m => m.roomId === r.id)
-          return <button key={r.id} className={`room-card room-color-${index % 3}`} onClick={() => setRoomId(r.id)}><div className="room-illustration"><span className="room-sticker">{['🌷', '☕', '🌙'][index % 3]}</span><span className="room-caption">{['the days we shared', 'our kind of happiness', 'little things, big feelings'][index % 3]}</span><div className="avatar-row">{r.memberIds.map(id => <span key={id}>{data.members.find(m => m.id === id)?.emoji}</span>)}</div></div><div className="room-info"><p className="eyebrow">{meetings.length} MEMORIES</p><h3>{displayRoomName(r, data.members)}</h3><p>{meetings[0] ? dateLabel(meetings[0].date) + '의 기억' : '첫 기억을 기다리고 있어요'}<span>↗</span></p></div></button>
+          return <button key={r.id} className={`room-card room-color-${index % 3}`} onClick={() => { setRoomId(r.id); setRoomTab('feed') }}><div className="room-illustration"><span className="room-sticker">{['🌷', '☕', '🌙'][index % 3]}</span><span className="room-caption">{['the days we shared', 'our kind of happiness', 'little things, big feelings'][index % 3]}</span><div className="avatar-row">{r.memberIds.map(id => <span key={id}>{data.members.find(m => m.id === id)?.emoji}</span>)}</div></div><div className="room-info"><p className="eyebrow">{meetings.length} MEMORIES</p><h3>{displayRoomName(r, data.members)}</h3><p>{meetings[0] ? dateLabel(meetings[0].date) + '의 기억' : '첫 기억을 기다리고 있어요'}<span>↗</span></p></div></button>
         })}{!data.rooms.length && <div className="empty"><span>✉</span><h3>아직 꺼내 볼 추억이 없어요.</h3><p>첫 만남을 기록하면 친구들의 기록방이 생겨요.</p><button className="secondary" onClick={() => setNewMeeting(true)}>첫 번째 하루 기록하기</button></div>}</div> : <><Actor members={data.members} active={activeMember} onChange={setActiveMember} /><div className="feed">{visible.map(m => { const r = data.rooms.find(r => r.id === m.roomId)!; return <MemoryEntry key={m.id} meeting={m} members={data.members.filter(member => r.memberIds.includes(member.id))} actor={r.memberIds.includes(activeMember) ? activeMember : r.memberIds[0]} onChange={action} /> })}</div></>}
         <section className="demo-panel"><div><span>🎞</span><h3>친구 넷의 1년, 미리 만나 볼까요?</h3><p>9번의 만남과 사계절의 기억이 담긴 데모예요.</p></div><div className="demo-actions"><button className="secondary" onClick={() => void action(async () => { const demo = buildDemo(); await importDemo(demo.meetings, demo.photos) }, '친구 넷의 1년을 불러왔어요 ♡')}>데모 데이터 불러오기</button><button className="text-button" onClick={() => setReset(true)}>초기화</button></div></section>
       </>}
-      <footer><span className="footer-brand">receiptory ✳</span><p>소중한 건 금액이 아니라, 함께한 마음.</p><small>기록은 이 브라우저에만 저장돼요.</small></footer>
+      <footer><span className="footer-brand">Receiptory · 리시토리 ✳</span><p>소중한 건 금액이 아니라, 함께한 마음.</p><small>기록은 이 브라우저에만 저장돼요.</small></footer>
     </main>
     {notice && <div className="toast" role="status">{notice}</div>}
-    {newMeeting && data.members.length > 0 && <MeetingForm members={data.members} onClose={() => setNewMeeting(false)} onCreated={m => { setNewMeeting(false); setRoomId(m.roomId); void refresh(); setNotice('우리의 하루가 기록되었어요 ♡') }} />}
+    {newMeeting && data.members.length > 0 && <MeetingForm members={data.members} initialMemberIds={room?.memberIds} onClose={() => setNewMeeting(false)} onCreated={m => { setNewMeeting(false); setRoomId(m.roomId); setRoomTab('feed'); void refresh(); setNotice('우리의 하루가 기록되었어요 ♡') }} />}
     {settings && <Settings members={data.members} actor={activeMember} onActor={setActiveMember} onClose={() => setSettings(false)} onSave={m => action(() => saveMember(m), '친구 정보를 저장했어요.')} />}
     {reset && <div className="dialog-backdrop"><section className="dialog small" role="dialog" aria-modal="true" aria-labelledby="reset-title"><h2 id="reset-title">모든 기억을 지울까요?</h2><p>사진, 댓글, 기록방을 포함한 이 브라우저의 모든 기록이 삭제돼요. 되돌릴 수 없어요.</p><div className="button-row"><button className="secondary" onClick={() => setReset(false)}>간직할래요</button><button className="primary" onClick={() => { void action(resetData, '기록을 초기화했어요.'); setReset(false); setRoomId(undefined); setActiveMember('a') }}>모두 초기화</button></div></section></div>}
   </>
@@ -65,6 +69,7 @@ function MemoryEntry({ meeting, members, actor, onChange }: { meeting: Meeting; 
   const refreshPhotos = useCallback(async () => { setPhotos(await getPhotos(meeting.id)) }, [meeting.id])
   useEffect(() => { void refreshPhotos().catch(() => undefined) }, [refreshPhotos])
   return <article className="memory-entry"><MemoryReceipt meeting={meeting} members={members} photos={photos} onChange={onChange} />
+    <PhotoBoothSection meeting={meeting} actor={actor} photos={photos} onRefresh={refreshPhotos} onChange={onChange} />
     <PhotoSection meeting={meeting} members={members} actor={actor} photos={photos} onRefresh={refreshPhotos} onChange={onChange} />
     <RouteMap meeting={meeting} photos={photos} />
     <div className="reactions">{['♡', '🥹', '😂', '✨'].map(emoji => <button key={emoji} className={meeting.reactions[emoji]?.includes(actor) ? 'reacted' : ''} aria-label={`${emoji} 반응`} aria-pressed={meeting.reactions[emoji]?.includes(actor) ?? false} onClick={() => void onChange(() => updateMeeting(meeting.id, current => { const list = current.reactions[emoji] ?? []; return { ...current, reactions: { ...current.reactions, [emoji]: list.includes(actor) ? list.filter(id => id !== actor) : [...list, actor] } } }))}>{emoji} <small>{meeting.reactions[emoji]?.length || ''}</small></button>)}</div>

@@ -19,6 +19,8 @@ it('9번의 만남, 항목 2–5건, 감정, 사진 GPS와 다섯 분배 규칙�
     for (const photo of demo.photos.filter(p => p.meetingId === meeting.id)) expect(matchPhoto(photo, meeting.expenses)).toBe(photo.expenseId)
   }
   expect(rules.size).toBe(5)
+  expect(demo.photos.filter(p => p.kind === 'photobooth')).toHaveLength(4)
+  expect(demo.meetings.filter(m => m.expenses.some(e => e.category === 'photobooth'))).toHaveLength(4)
 })
 it('데모는 중복되지 않고 기존 사용자 만남과 사진을 보존한다', async () => {
   await resetData()

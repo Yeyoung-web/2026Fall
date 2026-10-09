@@ -5,12 +5,12 @@ export interface Comment { id: string; memberId: string; text: string; at: strin
 export interface Meeting {
   id: string; roomId: string; title: string; date: string; expenses: Expense[];
   emotions: string[]; paidMemberIds: string[]; reactions: Record<string, string[]>;
-  comments: Comment[]; coverPhotoId?: string; demo?: boolean
+  comments: Comment[]; coverPhotoId?: string; demo?: boolean; qrLinks?: { id: string; url: string; savedAt: string }[]
 }
 export interface Photo {
   id: string; meetingId: string; uploaderId: string; fileName: string; blob: Blob;
   takenAt?: string; latitude?: number; longitude?: number; expenseId?: string;
-  match: 'auto' | 'manual' | 'unmatched'; demo?: boolean
+  match: 'auto' | 'manual' | 'unmatched'; demo?: boolean; kind?: 'memory' | 'photobooth'
 }
 export const INITIAL_MEMBERS: Member[] = [
   { id: 'a', name: '예영', emoji: '🐰', account: '' },
@@ -18,8 +18,8 @@ export const INITIAL_MEMBERS: Member[] = [
   { id: 'c', name: '민준', emoji: '🐱', account: '' },
   { id: 'd', name: '지우', emoji: '🐶', account: '' },
 ]
-export const categoryLabels = { cafe: '카페', restaurant: '식당', bar: '술집', stay: '숙소', other: '기타' }
-export const categoryStickers = { cafe: '☕', restaurant: '🍜', bar: '🍻', stay: '🏡', other: '🌷' }
+export const categoryLabels = { cafe: '카페', restaurant: '식당', bar: '술집', stay: '숙소', other: '기타', photobooth: '포토부스' }
+export const categoryStickers = { cafe: '☕', restaurant: '🍜', bar: '🍻', stay: '🏡', other: '🌷', photobooth: '🎞' }
 export function roomKey(memberIds: string[]) {
   if (!memberIds.length || new Set(memberIds).size !== memberIds.length) throw new Error('서로 다른 멤버를 선택해 주세요.')
   return JSON.stringify([...memberIds].sort())

@@ -68,7 +68,7 @@ describe('최소 송금', () => {
   })
   it('그리디가 놓치는 독립적인 0원 그룹을 찾아 최소화한다', () => {
     const b = [-8, -7, -5, 10, 10].map((net, i) => ({ memberId: String(i), net }))
-    // Another nontrivial partition: -8 + 8, -7 -5 +12 => 3, greedy => 4.
+    // Three exact pairs need 3 transfers; greedy consumes +4 then +6 for -10 and needs 4.
     const partition = [-10, -6, -4, 4, 6, 10].map((net, i) => ({ memberId: String(i), net }))
     expect(verify(partition)).toHaveLength(3)
     expect(verify(b)).toHaveLength(4)

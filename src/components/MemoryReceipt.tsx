@@ -3,6 +3,7 @@ import { toBlob } from 'html-to-image'
 import { settle } from '../engine/settlement'
 import { categoryStickers, dateLabel, won, type Meeting, type Member, type Photo } from '../data/models'
 import { updateMeeting } from '../data/storage'
+import { preferredCover } from '../data/photoBooth'
 import { transferApps } from '../config/transferApps'
 import { usePhotoUrl } from './PhotoSection'
 export default function MemoryReceipt({ meeting, members, photos, onChange }: {
@@ -15,7 +16,7 @@ export default function MemoryReceipt({ meeting, members, photos, onChange }: {
   const wasComplete = useRef(completed)
   const [lastStamp, setLastStamp] = useState('')
   const sheet = useRef<HTMLDivElement>(null), exportContent = useRef<HTMLDivElement>(null)
-  const cover = photos.find(p => p.id === meeting.coverPhotoId) ?? photos[0]
+  const cover = preferredCover(photos, meeting.coverPhotoId)
   const coverUrl = usePhotoUrl(cover)
   const { balances, transfers } = settle(members.map(m => m.id), meeting.expenses)
   useEffect(() => {
@@ -51,7 +52,7 @@ export default function MemoryReceipt({ meeting, members, photos, onChange }: {
     return <div className={`receipt-paper ${completed ? 'developed' : 'pending'} ${developing && !exportMode ? 'developing' : ''}`}>
       <div className="receipt-topline"><span>MEMORY RECEIPT</span><span>NO. {meeting.id.replace(/[^0-9]/g, '').slice(-4).padStart(4, '0')}</span></div>
       <div className="receipt-brand">RECEIPTORY</div><p className="receipt-subtitle">Every receipt has a story</p>
-      {coverUrl ? <figure className="receipt-cover"><img src={coverUrl} alt={cover?.fileName ?? meeting.title} loading={exportMode ? 'eager' : 'lazy'} /><figcaption>{cover?.demo ? 'ILLUSTRATED DEMO MEMORY' : 'OUR MOMENT ON FILM'}</figcaption></figure> : <div className="receipt-placeholder"><span>✳</span><p>사진보다 먼저,<br />마음에 담긴 하루.</p></div>}
+      {coverUrl ? <figure className={`receipt-cover ${cover?.kind === 'photobooth' ? 'booth-cover' : ''}`}><img src={coverUrl} alt={cover?.fileName ?? meeting.title} loading={exportMode ? 'eager' : 'lazy'} /><figcaption>{cover?.kind === 'photobooth' ? 'FOUR FRAMES, ONE STORY ♡' : cover?.demo ? 'ILLUSTRATED DEMO MEMORY' : 'OUR MOMENT ON FILM'}</figcaption></figure> : <div className="receipt-placeholder"><span>✳</span><p>사진보다 먼저,<br />마음에 담긴 하루.</p></div>}
       <p className="receipt-date">{dateLabel(meeting.date)}</p><h2>{meeting.title}</h2><p className="receipt-members">{members.map(m => `${m.emoji} ${m.name}`).join(' · ')}</p>
       <div className="dashed" />
       <div className="receipt-expenses">{meeting.expenses.map(e => <p className="expense-line" key={e.id}><span>{categoryStickers[e.category]} {e.place}</span><small>{won(e.amount)}</small></p>)}</div>

@@ -12,7 +12,7 @@ export interface Expense {
   payments: Payment[]
   at: string
   place: string
-  category: 'cafe' | 'restaurant' | 'bar' | 'stay' | 'other'
+  category: 'cafe' | 'restaurant' | 'bar' | 'stay' | 'other' | 'photobooth'
   split: SplitRule
 }
 export interface Balance { memberId: string; paid: number; owed: number; net: number }

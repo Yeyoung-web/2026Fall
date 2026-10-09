@@ -74,3 +74,9 @@ export async function importDemo(meetings: Meeting[], photos: Photo[]) {
   await tx.done
   db.close()
 }
+export async function getPhotosForMeetings(meetingIds: string[]) {
+  const db = await dbPromise()
+  const photos = (await Promise.all(meetingIds.map(id => db.getAllFromIndex('photos', 'by-meeting', id)))).flat()
+  db.close()
+  return photos
+}

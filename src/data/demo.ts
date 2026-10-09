@@ -1,17 +1,18 @@
+import { classifyPlace } from './photoBooth'
 import { INITIAL_MEMBERS, roomKey, type Meeting, type Photo } from './models'
 import type { Expense, SplitRule } from '../engine/settlement'
 const ids = INITIAL_MEMBERS.map(m => m.id)
 interface Scene { date: string; title: string; emotions: string[]; scene: string; places: [string, number, Expense['category']][] }
 const scenes: Scene[] = [
   { date: '2025-02-14', title: '떡볶이와 끝없는 수다', scene: 'food', emotions: ['수다 3시간', '맵다고 웃은 횟수 ∞'], places: [['우리동네 떡볶이', 28000, 'restaurant'], ['달콤한 아이스크림', 12000, 'cafe']] },
-  { date: '2025-03-22', title: '생일 축하해, 우리의 봄', scene: 'birthday', emotions: ['소원 하나', '너를 위한 마음 네 개'], places: [['작은 케이크 가게', 38000, 'cafe'], ['생일 저녁 식탁', 84000, 'restaurant'], ['네 컷 사진관', 8000, 'other']] },
-  { date: '2025-04-12', title: '벚꽃 아래, 네 사람', scene: 'spring', emotions: ['벚꽃잎 주운 날', '사진으로 못 담은 바람'], places: [['봄날의 김밥', 24000, 'restaurant'], ['공원 옆 카페', 22000, 'cafe'], ['한강 자전거', 16000, 'other']] },
-  { date: '2025-05-17', title: '시험 끝! 오늘은 아무 생각 없이', scene: 'picnic', emotions: ['해방감 100%', '내일 걱정은 내일'], places: [['수고했어 파스타', 62000, 'restaurant'], ['보드게임 카페', 32000, 'cafe']] },
+  { date: '2025-03-22', title: '생일 축하해, 우리의 봄', scene: 'birthday', emotions: ['소원 하나', '너를 위한 마음 네 개'], places: [['작은 케이크 가게', 38000, 'cafe'], ['생일 저녁 식탁', 84000, 'restaurant'], ['인생네컷 성수점', 8000, 'photobooth']] },
+  { date: '2025-04-12', title: '벚꽃 아래, 네 사람', scene: 'spring', emotions: ['벚꽃잎 주운 날', '사진으로 못 담은 바람'], places: [['봄날의 김밥', 24000, 'restaurant'], ['공원 옆 카페', 22000, 'cafe'], ['한강 자전거', 16000, 'other'], ['포토그레이 봄날점', 8000, 'photobooth']] },
+  { date: '2025-05-17', title: '시험 끝! 오늘은 아무 생각 없이', scene: 'picnic', emotions: ['해방감 100%', '내일 걱정은 내일'], places: [['수고했어 파스타', 62000, 'restaurant'], ['보드게임 카페', 32000, 'cafe'], ['하루필름 대학로점', 8000, 'photobooth']] },
   { date: '2025-06-28', title: '낯선 동네에서 찾은 단골', scene: 'coffee', emotions: ['새 단골집 +1', '길 잃어도 함께니까'], places: [['골목의 작은 카페', 26000, 'cafe'], ['오래된 책방', 18000, 'other'], ['성수 저녁 골목', 56000, 'restaurant']] },
   { date: '2025-08-09', title: '1박 2일, 우리의 여름', scene: 'travel', emotions: ['파도 소리 무제한', '별 세다 잠든 밤'], places: [['바다로 가는 기차', 120000, 'other'], ['바닷가 점심', 64000, 'restaurant'], ['작은 바다 숙소', 240000, 'stay'], ['밤바다 편의점', 38000, 'other'], ['돌아오는 아침 커피', 18000, 'cafe']] },
   { date: '2025-09-20', title: '서운한 마음도, 결국 우리라서', scene: 'bar', emotions: ['미안해 한마디', '화해의 포옹 네 번'], places: [['우리의 단골 술집', 78000, 'bar'], ['따뜻한 해장 국밥', 36000, 'restaurant']] },
   { date: '2025-11-08', title: '낙엽 밟으며 나눈 작은 꿈', scene: 'autumn', emotions: ['바스락 소리 한 봉지', '꿈을 응원하는 마음'], places: [['늦가을 브런치', 58000, 'restaurant'], ['숲길의 찻집', 24000, 'cafe'], ['작은 전시관', 28000, 'other']] },
-  { date: '2025-12-27', title: '올해도 너희라서 참 좋았어', scene: 'winter', emotions: ['함께한 1년', '내년에도 우리 ♡'], places: [['따뜻한 연말 식탁', 96000, 'restaurant'], ['겨울밤 카페', 24000, 'cafe'], ['우리의 마지막 네 컷', 8000, 'other']] },
+  { date: '2025-12-27', title: '올해도 너희라서 참 좋았어', scene: 'winter', emotions: ['함께한 1년', '내년에도 우리 ♡'], places: [['따뜻한 연말 식탁', 96000, 'restaurant'], ['겨울밤 카페', 24000, 'cafe'], ['우리의 마지막 네컷', 8000, 'photobooth']] },
 ]
 /** Locally generated, offline demo illustrations. Not actual user photographs. */
 export function demoIllustration(scene: string, variant = 0): string {
@@ -47,7 +48,7 @@ export function buildDemo(): { meetings: Meeting[]; photos: Photo[] } {
       if (i === 3 && j === 1) split = { type: 'participants', memberIds: ['a', 'b', 'c'] }
       if (i === 4 && j === 1) split = { type: 'weights', weights: { a: 2, b: 1, c: 1, d: 0 } }
       if (i === 5 && j === 2) split = { type: 'multiple' }
-      return { id: `${id}-expense-${j}`, place, amount, category, at: new Date(`${scene.date}T${String(12 + j * 2).padStart(2, '0')}:00:00+09:00`).toISOString(), split,
+      return { id: `${id}-expense-${j}`, place, amount, category: classifyPlace(place, category), at: new Date(`${scene.date}T${String(12 + j * 2).padStart(2, '0')}:00:00+09:00`).toISOString(), split,
         payments: split.type === 'multiple' ? [{ memberId: 'a', amount: 180000 }, { memberId: 'b', amount: 60000 }] : [{ memberId: payer, amount }] }
     })
     expenses.forEach((expense, j) => {
@@ -59,6 +60,12 @@ export function buildDemo(): { meetings: Meeting[]; photos: Photo[] } {
         expenseId: expense.id, match: 'auto', demo: true,
       })
     })
+    const booth = expenses.find(e => e.category === 'photobooth')
+    if (booth) photos.push({ id: `${id}-booth`, meetingId: id, uploaderId: ids[i % 4],
+      fileName: `${scene.date} · 직접 생성한 네컷 프레임`, blob: new Blob([demoBoothStrip(scene.date, i)], { type: 'image/svg+xml' }),
+      takenAt: booth.at, expenseId: booth.id, match: 'manual', kind: 'photobooth', demo: true,
+      latitude: 37.544 + expenses.indexOf(booth) * 0.0025, longitude: 127.042 + expenses.indexOf(booth) * 0.003,
+    })
     return { id, roomId: roomKey(ids), title: scene.title, date: expenses[0].at, expenses,
       emotions: scene.emotions, paidMemberIds: i === 8 ? ['a', 'b', 'c'] : [...ids],
       coverPhotoId: `${id}-photo-0-0`, demo: true, reactions: { '♡': ['a', 'c'], '✨': ['b'] },
@@ -66,4 +73,18 @@ export function buildDemo(): { meetings: Meeting[]; photos: Photo[] } {
     }
   })
   return { meetings, photos }
+}
+
+/** Four original pastel frames; no vendor image, logo, or copyrighted character. */
+export function demoBoothStrip(date: string, variant = 0): string {
+  const palettes = ['#d8e2cc', '#e8d9cd', '#d5e1de', '#e3dfc9']
+  const frames = Array.from({ length: 4 }, (_, i) => {
+    const y = 34 + i * 115
+    const people = Array.from({ length: 4 }, (_, person) => {
+      const x = 34 + person * 36, offset = ((i + person) % 2) * 5
+      return `<g transform="translate(${x} ${y + 48 + offset})"><path d="M-13 43q0-34 13-34q13 0 13 34" fill="${['#8fa183', '#b8a082', '#8ca6a0', '#b6af85'][person]}"/><circle cy="-1" r="12" fill="#f7e6ce"/><path d="M-12-3q0-17 13-15q15 2 11 16l-4-8q-13 8-20 7" fill="${['#6e695a', '#817363', '#646b5f', '#8a7e67'][person]}"/><circle cx="-4" cy="1" r="1" fill="#6c725d"/><circle cx="4" cy="1" r="1" fill="#6c725d"/><path d="M-3 5q3 3 6 0" fill="none" stroke="#a99275" stroke-width="1"/><path d="M-11 17l-10-17m32 17l8-17" stroke="${['#8fa183', '#b8a082', '#8ca6a0', '#b6af85'][person]}" stroke-width="5" stroke-linecap="round"/></g>`
+    }).join('')
+    return `<rect x="13" y="${y}" width="154" height="105" rx="1" fill="${palettes[(i + variant) % 4]}"/>${people}<text x="156" y="${y + 15}" text-anchor="end" fill="#fffdf5" font-family="monospace" font-size="8">0${i + 1}</text>`
+  }).join('')
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="180" height="540" viewBox="0 0 180 540"><rect width="180" height="540" fill="#fcf6e9"/><text x="90" y="21" text-anchor="middle" fill="#728364" font-family="monospace" font-size="9" letter-spacing="2">RECEIPTORY</text>${frames}<text x="90" y="518" text-anchor="middle" fill="#8a957b" font-family="monospace" font-size="10">${date}</text><text x="90" y="533" text-anchor="middle" fill="#a5ad95" font-family="monospace" font-size="5" letter-spacing="1">FOUR FRAMES, ONE STORY</text></svg>`
 }
