@@ -1,3 +1,4 @@
+import { sampleReceipt } from '../receipts/samples'
 import { classifyPlace } from './photoBooth'
 import { INITIAL_MEMBERS, roomKey, type Meeting, type Photo } from './models'
 import type { Expense, SplitRule } from '../engine/settlement'
@@ -51,6 +52,12 @@ export function buildDemo(): { meetings: Meeting[]; photos: Photo[] } {
       return { id: `${id}-expense-${j}`, place, amount, category: classifyPlace(place, category), at: new Date(`${scene.date}T${String(12 + j * 2).padStart(2, '0')}:00:00+09:00`).toISOString(), split,
         payments: split.type === 'multiple' ? [{ memberId: 'a', amount: 180000 }, { memberId: 'b', amount: 60000 }] : [{ memberId: payer, amount }] }
     })
+    if ([0, 3, 6].includes(i)) {
+      const receipt = sampleReceipt([0, 3, 6].indexOf(i))
+      receipt.items.filter(item => item.kind === 'menu').forEach((item, k) => { item.selectedMemberIds = k === 0 ? ['a', 'b'] : k === 1 ? ['c'] : [] })
+      receipt.confirmedMemberIds = [...ids]
+      expenses[0] = { ...expenses[0], receipt, amount: receipt.total, payments: [{ memberId: expenses[0].payments[0].memberId, amount: receipt.total }] }
+    }
     expenses.forEach((expense, j) => {
       for (let member = 0; member < (j === 0 ? 2 : 1); member++) photos.push({
         id: `${id}-photo-${j}-${member}`, meetingId: id, uploaderId: ids[(i + j + member) % 4],

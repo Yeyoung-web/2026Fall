@@ -12,6 +12,7 @@ Node.js 24와 npm을 사용합니다. 버전은 `.nvmrc`, 의존성은 `package-
 ```bash
 npm ci
 npm run dev
+# 공유 정산 개발 시 별도 터미널에서 npm run dev:api
 ```
 
 ```bash
@@ -38,7 +39,9 @@ Linux에서 `/usr/bin/chromium`이 있으면 해당 브라우저를 사용하고
 - **동선:** Leaflet + OpenStreetMap, 사진 GPS를 촬영 시각순으로 연결. 카페·식당·술집·숙소·기타 스티커. 같은 지출 장소의 사진은 첫 촬영 위치 하나로 묶음. 사진 위치를 잇는 선이며 실제 도로 경로를 계산하지 않음.
 - **네컷 연동:** 설정 파일의 7종 포토부스 키워드 자동 분류와 안내 배너. html5-qrcode로 휴대폰 카메라 또는 QR 이미지를 읽고, 확인한 웹 링크를 만남에 저장한 뒤 새 탭으로 열기. QR 없이 네컷 이미지 직접 업로드. 네컷 대표 사진 우선, 세로 필름 형태 표시, 기록방의 시간순 가로 앨범, 연말 `올해 찍은 네컷 N장` 집계.
 - **친구 프로필:** 이름·계좌 등록, 친구 추가, 한 기기에서 기록하는 친구 전환.
-- **로컬 저장:** 사진 Blob을 포함한 모든 데이터는 IndexedDB. 백엔드, 회원가입, 온라인 공유 없음.
+- **메뉴별 정산:** Tesseract.js kor+eng 영수증 OCR, 편집 가능한 메뉴·수량·행 금액 표, 합계 불일치 경고, 메뉴 선택·공용 분할·비례 할인, 샘플 영수증 3종.
+- **공유 정산:** Node.js/SQLite API, 친구별 초대 링크, 비회원 참여, 회원 기록방. 참여 시점에 기록 추가, 보냈어요 → 받았어요 확인, 전원 완료 카드 현상. MockTransferProvider는 실제 송금하지 않음.
+- **저장 모드:** Pages 첫 화면은 IndexedDB 로컬 데모. Docker는 앱과 API를 함께 제공하고 회원 기록·사진은 서버 SQLite에 저장. 공유 기능은 실제 API 서버 호스팅이 필요함.
 - **시연:** 첫 화면의 `데모 데이터 불러오기` / `초기화` 버튼.
 
 ## 정산 알고리즘
@@ -52,7 +55,7 @@ Linux에서 `/usr/bin/chromium`이 있으면 해당 브라우저를 사용하고
 
 필수 예시: A 400,000원 / B 120,000원 / C 40,000원 / D 0원. 모두 140,000원씩 부담하고 **D→A 140,000원, C→A 100,000원, B→A 20,000원**으로 정산합니다. 작은 순액 조합은 독립적인 0원 부분집합 분할 최적값과 비교하는 테스트를 포함합니다.
 
-송금 완료는 사용자가 직접 체크하는 시연 기능입니다. 앱은 실제 송금 여부를 확인하지 않고, 돈을 보관하거나 이체하지 않습니다. 계좌 복사만 지원하며 토스·카카오페이 링크는 `src/config/transferApps.ts`에서 `null` placeholder입니다. 공식 문서로 확인한 URL을 넣기 전에는 연결하지 않습니다.
+로컬 데모의 송금 완료 체크는 시연 기능입니다. 공유 API에서는 보낸 사람 보고와 받은 사람 확인을 분리하며, 참여 확인 시 기록을 추가합니다. 앱은 실제 송금 여부를 확인하지 않고, 돈을 보관하거나 이체하지 않습니다. 계좌 복사만 지원하며 토스·카카오페이 링크는 `src/config/transferApps.ts`에서 `null` placeholder입니다. 공식 문서로 확인한 URL을 넣기 전에는 연결하지 않습니다.
 
 ## 친구 넷의 1년 시연
 
@@ -76,7 +79,7 @@ Linux에서 `/usr/bin/chromium`이 있으면 해당 브라우저를 사용하고
 2. 구현 커밋을 `main`에 반영하거나 Actions의 **Deploy Receiptory to GitHub Pages**에서 `workflow_dispatch`를 실행합니다.
 3. 워크플로는 `npm ci` → 테스트 → 빌드 → Pages 업로드·배포를 수행합니다.
 
-워크플로 파일을 포함했으며 이 작업 중 실제 원격 배포를 실행하지는 않습니다. 배포 주소와 개발 주소는 서로 다른 origin이므로 로컬 IndexedDB 데이터가 자동 이전되지 않습니다. 배포 화면에서 데모를 다시 불러오면 됩니다.
+main push 시 GitHub Actions가 정적 데모를 배포합니다. API 서버는 Pages에서 실행되지 않습니다. [배포 구성](docs/deployment.md), [공유 정산](docs/shared-settlement.md), [영수증 정산](docs/receipt-settlement.md)을 참고하세요. 배포 주소와 개발 주소는 서로 다른 origin이므로 로컬 IndexedDB 데이터가 자동 이전되지 않습니다. 배포 화면에서 데모를 다시 불러오면 됩니다.
 
 ## 화면 스크린샷
 
@@ -111,7 +114,7 @@ Linux에서 `/usr/bin/chromium`이 있으면 해당 브라우저를 사용하고
 - 업로드는 한 번에 20장, 한 장 20MB 이하입니다. HEIC는 JPG로 변환해 주세요. 용량이 부족하면 저장 오류를 표시합니다.
 - EXIF에 UTC 오프셋이 있으면 적용합니다. 오프셋 없는 EXIF는 기기의 시간대를 사용하므로 다른 시간대 사진은 직접 장소를 수정해 주세요. 화면 날짜는 한국 시간 기준입니다.
 - OSM 지도 배경은 인터넷 연결이 필요합니다. 이 클라우드에서는 `tile.openstreetmap.org` 허용을 환경 설정 초안에 저장했으며, 설정 저장·게시 후 적용됩니다. 타일 로드 실패 시 안내를 표시하고 장소 목록과 GPS 마커를 유지합니다. 데모 이미지와 글꼴은 외부 이미지 서버 없이 동작합니다.
-- 금전 보관·결제 API·송금 API·계정 인증·서버 동기화 기능이 없는 프로토타입입니다.
+- 실제 금전 보관·결제·송금 API는 없습니다. 공유 API의 기본 인증과 동기화는 구현했지만 공개 API 호스팅은 아직 없습니다.
 
 ## 구조
 
@@ -120,11 +123,15 @@ src/engine/       정산 순수 함수와 테스트
 src/data/         IndexedDB, 도메인 모델, EXIF 매칭, 동선, 데모
 src/components/   만남 폼, 감성 영수증, 사진 앨범, 지도
 src/config/       외부 송금 앱 placeholder, 포토부스 키워드
-src/App.tsx       홈, 기록방, 반응·댓글, 프로필
+src/receipts/     OCR, 파서, 편집 표, 샘플
+src/shared/       온라인 정산 UI
+server/           HTTP/SQLite, 세션, 참여, 송금 확인 API
+src/App.tsx       로컬·공유 모드 선택
+src/LocalDemo.tsx 로컬 홈, 기록방, 반응·댓글, 프로필
 .github/workflows/pages.yml  GitHub Pages 배포
 ```
 
-React + TypeScript + Vite / idb / exifr / html-to-image / Leaflet / html5-qrcode / Vitest / Playwright. 사용한 서드파티 라이브러리와 글꼴의 라이선스는 각 패키지에 포함되어 있습니다.
+React + TypeScript + Vite / idb / exifr / html-to-image / Leaflet / html5-qrcode / Tesseract.js / Node.js SQLite / Vitest / Playwright. 사용한 서드파티 라이브러리와 글꼴의 라이선스는 각 패키지에 포함되어 있습니다.
 
 ## 단계별 커밋
 
@@ -134,11 +141,10 @@ React + TypeScript + Vite / idb / exifr / html-to-image / Leaflet / html5-qrcode
 4. 감성 영수증·송금 확인·PNG·9회 데모
 5. GPS 동선·GitHub Pages·한국어 문서
 6. 포토부스 감지·QR·네컷 앨범·연말 결산
+7. 공유 정산 API·참여/송금 확인 분리, 영수증 OCR·메뉴 정산·Docker 구성
 
-## 최종 검증 결과
+## 검증
 
-- 잠금 파일 기준 `npm ci` 재설치 후 `npm run test`: **32개 통과**.
-- `npm run build`: TypeScript 검사와 Vite 프로덕션 빌드 성공.
-- `npm run test:e2e`: **390px Chromium 시나리오 7개 통과**. 저장·복원, 사진 매칭 fallback, 반응·댓글, 완료 연출, PNG 1080×1920, 네컷 업로드·앨범·연간 집계, 실제 QR 이미지 디코딩, 테스트 카메라 종료, 계좌 복사, 초기화 확인 포함.
-- 빌드 결과를 `/2026Fall/`에 마운트한 정적 서버에서 자산 로드, 데모, 네컷 앨범, 연말 집계 검증 성공.
-- 현재 클라우드의 OSM 실시간 타일 요청은 네트워크 정책으로 **403**. 허용 도메인 초안을 저장했고, 실패 시 GPS 마커·경로·장소 목록은 검증했습니다. 원격 GitHub Pages 배포와 실물 휴대폰 카메라는 아직 실행·검증하지 않았습니다.
+`npm run test`는 기존 정산·저장·사진 테스트와 영수증 파서·할인·참여·역할별 송금·인증·계좌 공개 범위 테스트를 실행합니다. `npm run test:e2e`는 390px 화면, 로컬 저장·사진·QR·네컷·PNG, 실제 kor+eng OCR, 두 브라우저의 회원/비회원 참여와 송금 확인을 검사합니다. `npm run build`로 타입과 정적 빌드를 검사합니다.
+
+공개 Pages: https://yeyoung-web.github.io/2026Fall/ . 새 만남 → 영수증으로 메뉴별 정산하기 → 샘플 또는 사진 업로드 순서로 직접 테스트할 수 있습니다. 기존 화면 스크린샷은 단계 6 데모 기준입니다. 새 OCR 화면 스크린샷 자리: 업로드 / 편집 표 / 메뉴 선택.

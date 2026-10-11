@@ -1,3 +1,4 @@
+import { allocateReceipt, type MenuReceipt } from './receipt.ts'
 /** All money is represented as integer Korean won; no UI or storage dependencies. */
 export type SplitRule =
   | { type: 'equal' }
@@ -14,6 +15,7 @@ export interface Expense {
   place: string
   category: 'cafe' | 'restaurant' | 'bar' | 'stay' | 'other' | 'photobooth'
   split: SplitRule
+  receipt?: MenuReceipt
 }
 export interface Balance { memberId: string; paid: number; owed: number; net: number }
 export interface Transfer { from: string; to: string; amount: number }
@@ -45,6 +47,7 @@ export function allocateExpense(memberIds: string[], expense: Expense): Record<s
     paid = checkedAdd(paid, payment.amount)
   }
   if (paid !== expense.amount) throw new Error('결제 금액의 합이 지출 금액과 같아야 해요.')
+  if (expense.receipt) return allocateReceipt(memberIds, expense)
   const shares = Object.fromEntries(memberIds.map(id => [id, 0]))
   let weights: Record<string, number>
   const rule = expense.split
