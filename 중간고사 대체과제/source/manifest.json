@@ -21,13 +21,13 @@
   },
   {
     "path": "assets/film-story-strip.jpg",
-    "bytes": 189041,
-    "sha256": "6b87530494af312cc5ea82ffa6626bf2f1a9d8bd66f957b6ad0d00dd6c6f6049"
+    "bytes": 191635,
+    "sha256": "428e7005af479f0d490baa1e6d12e022859f1133e4f7bd983f97bf27ebe1cc20"
   },
   {
     "path": "assets/film-storyboard.jpg",
-    "bytes": 654834,
-    "sha256": "2f6006940cdc5f08980f49711c7a25f19bed5beadfb696448acc197a7f3d0b56"
+    "bytes": 656712,
+    "sha256": "64c069b01e31b3b8b0511634f432784912e341b7f5c10a3b3c821c82f4e0d5e3"
   },
   {
     "path": "assets/Flow-generation-proof.png",
@@ -172,7 +172,7 @@
   {
     "path": "index.html",
     "bytes": 1155,
-    "sha256": "015ce8929181a900e69e10de556f8fe8ad8c11d41d4f59e3612cbc810c3a55d9"
+    "sha256": "0c08b2c17f3229fc1de949afe1b5c978ea110ec811e773d4edb02223ba654f47"
   },
   {
     "path": "prototype/BITE-Anam-MVP-v9.zip",
@@ -182,12 +182,12 @@
   {
     "path": "README.md",
     "bytes": 3358,
-    "sha256": "65aad0931402f3b265bd87d483d82d5a6d4a3c0129e6a37cd845c7d74502b580"
+    "sha256": "c60ededdc6a7fde6a1bddf9026e4acb56e0a89732371130366185d51c3df9fee"
   },
   {
     "path": "report/BITE_Midterm_Report.pdf",
-    "bytes": 6036278,
-    "sha256": "ce29b99794a6939f449d99cb9fe28401774306e5ea3865255f61db47c7ee30a0"
+    "bytes": 6064832,
+    "sha256": "c06cf07b77d8f9087e8e824abcec261438edc5b636c1deadd0425974f2fcf788"
   },
   {
     "path": "source/audio/ending-0.wav",
@@ -206,8 +206,8 @@
   },
   {
     "path": "source/audio/ending-3.wav",
-    "bytes": 921850,
-    "sha256": "a650d3f5647a357e1f4735691c01a733d4b1b97b954efcf67083f3cec6348642"
+    "bytes": 1118924,
+    "sha256": "adc05163e10477d393b09b3e031122ecf1948cb5e157bf0b2bf0350e5eb6b66e"
   },
   {
     "path": "source/audio/ending-4.wav",
@@ -316,13 +316,13 @@
   },
   {
     "path": "source/brief.json",
-    "bytes": 8521,
-    "sha256": "2f96dcb48a0a0cc25a2bcc14a5c8d4a436ecab359ff94165d87626a8a93933f5"
+    "bytes": 8573,
+    "sha256": "cadc9f8792d878341995a222ba2a6408b6d81f6139f9a8c060786db069463e34"
   },
   {
     "path": "source/build_report.py",
     "bytes": 22845,
-    "sha256": "f009b88b375f6e6f159b4e995bcc440f2bfb6b060a8e3dc5048f65f473453e30"
+    "sha256": "34a6d0971727e1d02153e10ab04f9215a1dc7630de2eb72e50426b9419a308fd"
   },
   {
     "path": "source/community_scenes.py",
@@ -331,8 +331,8 @@
   },
   {
     "path": "source/film-edit.json",
-    "bytes": 5487,
-    "sha256": "cf48075200770949a2d548239a8689344604c95ed28b7d1a46c04ed6ad033723"
+    "bytes": 5620,
+    "sha256": "a73c06b3cb58b617b957924727555a46e2e5a8eeed09320f761ad0f89346f8d7"
   },
   {
     "path": "source/motion-timeline.json",
@@ -356,8 +356,8 @@
   },
   {
     "path": "source/render_film.py",
-    "bytes": 14703,
-    "sha256": "99e6b2464bd687f8f644b102126671cda224c93a4f56d584c97cc49169b006f9"
+    "bytes": 14771,
+    "sha256": "454b6ca149cf0d1426f275db9c328b1c0c9175917fc199547b42787912276233"
   },
   {
     "path": "source/render_media_base.py",
@@ -376,18 +376,18 @@
   },
   {
     "path": "source/verification.json",
-    "bytes": 1144,
-    "sha256": "4e68532eece0fafbe90796ba742bc850d4ff5091492bb79bfac932909c0036e4"
+    "bytes": 1494,
+    "sha256": "aae977ec28a3839d6e0286b174842879ec9a12b82525ec4a401e44ca3903313a"
   },
   {
     "path": "videos/BITE_AI_Film.srt",
-    "bytes": 2293,
-    "sha256": "44b06d11461374ef990e4332558d8120cb752ae53a826aca73bbe8ad18f9f1ed"
+    "bytes": 2345,
+    "sha256": "4707bfdc50ded8a173e72dca232824c442be112ad706c5cbabae9501ce96b792"
   },
   {
     "path": "videos/BITE_AI_Film_Generated_Video.mp4",
-    "bytes": 18373569,
-    "sha256": "0d1bcbb4599ea5936788513bd20c9ca5bf35581e8fc0166b89f05afe6d53b958"
+    "bytes": 17737657,
+    "sha256": "e611c384de8778fb863ad229375b4b98c5bb791fe62cbe8307e64d7f1f119ec5"
   },
   {
     "path": "videos/BITE_motion.srt",

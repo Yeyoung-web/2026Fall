@@ -10,7 +10,7 @@ GitHub: https://github.com/Yeyoung-web/2026Fall
 ## 제출 영상과 보고서
 
 - [모션그래픽 · 2분 10.21초](videos/BITE_MotionGraphic_Branded.mp4)
-- [AI 영화: 반 접시의 밤 · 2분 6.75초](videos/BITE_AI_Film_Generated_Video.mp4)
+- [AI 영화: 반 접시의 밤 · 2분 9.33초](videos/BITE_AI_Film_Generated_Video.mp4)
 - [사업·제작 보고서](report/BITE_Midterm_Report.pdf)
 
 ## 사업 구상

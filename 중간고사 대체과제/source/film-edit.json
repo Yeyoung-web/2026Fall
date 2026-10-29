@@ -118,10 +118,14 @@
       "ending_part": 3,
       "title": "두 개의 축, 단계적 확장",
       "requirement": "내용 · 계획",
-      "narration": "제보를 보고 사람들이 실제로 찾아가면, 매장이 직접 마감 상품을 올린다. 그렇게 모인 매장과 수요 위에, 나누기를 더한다.",
+      "narration": "제보를 보고 사람들이 실제로 찾아가면, 매장이 직접 마감 상품을 올린다. 이용자와 참여 매장이 늘어나면, 같은 메뉴를 원하는 손님을 연결해 나누기를 시작한다.",
       "source_voice": "ending-3.wav",
-      "seconds": 9.958333333333334,
-      "clip": null
+      "seconds": 12.541666666666666,
+      "clip": null,
+      "sentence_offsets": [
+        0.3,
+        6.115
+      ]
     },
     {
       "id": 12,
@@ -134,7 +138,7 @@
       "clip": null
     }
   ],
-  "duration_seconds": 126.75,
+  "duration_seconds": 129.33333333333334,
   "model": "Google Flow / Veo 3.1 Lite",
   "method": "AI-generated moving footage with Korean narration and original graphic composition.",
   "final_logo_extra_hold_seconds": 2.5

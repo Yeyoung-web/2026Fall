@@ -2,7 +2,7 @@ from pathlib import Path
 import sys,json,wave,math,subprocess,re,hashlib,functools
 import numpy as np
 from PIL import Image,ImageDraw,ImageFont
-HERE=Path(__file__).resolve().parent;R=HERE.parents[2] if HERE.name=='source' else Path.cwd();W=HERE/'build-v10-film' if HERE.name=='source' else R/'work/midterm-ai-video';W.mkdir(exist_ok=True);O=HERE.parent if HERE.name=='source' else R/'outputs/BITE-Midterm-Ukulele';(O/'videos').mkdir(exist_ok=True);(O/'source').mkdir(exist_ok=True)
+HERE=Path(__file__).resolve().parent;R=next((p for p in HERE.parents if (p/'work/media-python').exists()),HERE.parents[2]) if HERE.name=='source' else Path.cwd();W=HERE/'build-v12-film' if HERE.name=='source' else R/'work/midterm-ai-video';W.mkdir(exist_ok=True);O=HERE.parent if HERE.name=='source' else R/'outputs/BITE-Midterm-Ukulele';(O/'videos').mkdir(exist_ok=True);(O/'source').mkdir(exist_ok=True)
 sys.path.insert(0,str(R/'work/media-python'));import imageio_ffmpeg as io
 FF=io.get_ffmpeg_exe();FPS=24;SR=48000
 PAPER='#f7f5ef';INK='#252622';CORAL='#f65336'
@@ -161,7 +161,7 @@ def overlay(im,n,t):
   return im
  return Image.alpha_composite(im.convert('RGBA'),deco(n,idx)).convert('RGB')
 
-out=W/'film-v10-checked.mp4'
+out=W/'film-v12-checked.mp4'
 audio=HERE/'audio/film-restaurant-mix.wav'
 if not audio.exists():
  audio=W/'composite-audio.wav';subprocess.run([FF,'-y','-v','error','-i',str(O/'videos/BITE_AI_Film_Generated_Video.mp4'),'-vn','-ar','48000',str(audio)],check=True)

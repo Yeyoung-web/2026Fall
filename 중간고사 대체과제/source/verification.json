@@ -7,8 +7,8 @@
       "decode_errors": 0
     },
     "film": {
-      "seconds": 126.75,
-      "frames": 3042,
+      "seconds": 129.33333333333334,
+      "frames": 3104,
       "decode_errors": 0
     }
   },
@@ -27,5 +27,8 @@
   "narration_fade_applied": false,
   "github_upload_performed": false,
   "repository_assignment_folder": "중간고사 대체과제",
-  "repository_previous_assignments_folder": "이전과제"
+  "repository_previous_assignments_folder": "이전과제",
+  "changed_film_narration": "제보를 보고 사람들이 실제로 찾아가면, 매장이 직접 마감 상품을 올린다. 이용자와 참여 매장이 늘어나면, 같은 메뉴를 원하는 손님을 연결해 나누기를 시작한다.",
+  "sentence_pause_seconds": 0.65,
+  "last_word_encoded_gain_ratio": 0.999480964259098
 }
