@@ -1,0 +1,121 @@
+{
+  "sections": [
+    {
+      "kind": "chapter",
+      "scene": 0,
+      "start": 0.0,
+      "seconds": 2.5
+    },
+    {
+      "kind": "body",
+      "scene": 0,
+      "start": 2.5,
+      "seconds": 7.75
+    },
+    {
+      "kind": "body",
+      "scene": 1,
+      "start": 10.25,
+      "seconds": 7.458333333333333
+    },
+    {
+      "kind": "body",
+      "scene": 2,
+      "start": 17.708333333333332,
+      "seconds": 9.375
+    },
+    {
+      "kind": "chapter",
+      "scene": 3,
+      "start": 27.083333333333332,
+      "seconds": 3.0
+    },
+    {
+      "kind": "body",
+      "scene": 3,
+      "start": 30.083333333333332,
+      "seconds": 13.916666666666666
+    },
+    {
+      "kind": "chapter",
+      "scene": 4,
+      "start": 44.0,
+      "seconds": 3.0
+    },
+    {
+      "kind": "body",
+      "scene": 4,
+      "start": 47.0,
+      "seconds": 11.458333333333334
+    },
+    {
+      "kind": "body",
+      "scene": 5,
+      "start": 58.458333333333336,
+      "seconds": 8.75
+    },
+    {
+      "kind": "body",
+      "scene": 6,
+      "start": 67.20833333333334,
+      "seconds": 8.416666666666666
+    },
+    {
+      "kind": "body",
+      "scene": 9,
+      "start": 75.62500000000001,
+      "seconds": 9.541666666666666
+    },
+    {
+      "kind": "chapter",
+      "scene": 7,
+      "start": 85.16666666666669,
+      "seconds": 3.0
+    },
+    {
+      "kind": "body",
+      "scene": 7,
+      "start": 88.16666666666669,
+      "seconds": 10.25
+    },
+    {
+      "kind": "chapter",
+      "scene": 8,
+      "start": 98.41666666666669,
+      "seconds": 2.5
+    },
+    {
+      "kind": "body",
+      "scene": 8,
+      "start": 100.91666666666669,
+      "seconds": 8.791666666666666
+    },
+    {
+      "kind": "chapter",
+      "scene": 10,
+      "start": 109.70833333333336,
+      "seconds": 2.5
+    },
+    {
+      "kind": "body",
+      "scene": 10,
+      "start": 112.20833333333336,
+      "seconds": 8.958333333333334
+    },
+    {
+      "kind": "body",
+      "scene": 11,
+      "start": 121.16666666666669,
+      "seconds": 9.041666666666666
+    }
+  ],
+  "duration_seconds": 130.20833333333334,
+  "chapter_hold_seconds": {
+    "0": 2.5,
+    "3": 3.0,
+    "4": 3.0,
+    "7": 3.0,
+    "8": 2.5,
+    "10": 2.5
+  }
+}

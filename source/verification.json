@@ -1,0 +1,29 @@
+{
+  "date": "2026-10-29",
+  "media": {
+    "motion": {
+      "seconds": 130.20833333333334,
+      "frames": 3125,
+      "decode_errors": 0
+    },
+    "film": {
+      "seconds": 126.75,
+      "frames": 3042,
+      "decode_errors": 0
+    }
+  },
+  "final_hold_added_seconds": 2.5,
+  "appended_audio_peak": 0.0,
+  "pdf_pages": 13,
+  "pdf_annotation_urls": [
+    "https://github.com/Yeyoung-web/2026Fall",
+    "https://github.com/Yeyoung-web/2026Fall/blob/main/videos/BITE_MotionGraphic_Branded.mp4",
+    "https://github.com/Yeyoung-web/2026Fall/blob/main/videos/BITE_AI_Film_Generated_Video.mp4",
+    "https://github.com/Yeyoung-web/2026Fall"
+  ],
+  "motion_example_label_only_on_example_screens": true,
+  "film_concept_spelling_corrected": true,
+  "caption_max_rows": 2,
+  "narration_fade_applied": false,
+  "github_upload_performed": false
+}

@@ -1,0 +1,5 @@
+Pillow
+numpy
+reportlab
+pypdf
+imageio-ffmpeg
