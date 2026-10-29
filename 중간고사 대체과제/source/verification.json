@@ -17,13 +17,15 @@
   "pdf_pages": 13,
   "pdf_annotation_urls": [
     "https://github.com/Yeyoung-web/2026Fall",
-    "https://github.com/Yeyoung-web/2026Fall/blob/main/videos/BITE_MotionGraphic_Branded.mp4",
-    "https://github.com/Yeyoung-web/2026Fall/blob/main/videos/BITE_AI_Film_Generated_Video.mp4",
+    "https://github.com/Yeyoung-web/2026Fall/blob/main/%EC%A4%91%EA%B0%84%EA%B3%A0%EC%82%AC%20%EB%8C%80%EC%B2%B4%EA%B3%BC%EC%A0%9C/videos/BITE_MotionGraphic_Branded.mp4",
+    "https://github.com/Yeyoung-web/2026Fall/blob/main/%EC%A4%91%EA%B0%84%EA%B3%A0%EC%82%AC%20%EB%8C%80%EC%B2%B4%EA%B3%BC%EC%A0%9C/videos/BITE_AI_Film_Generated_Video.mp4",
     "https://github.com/Yeyoung-web/2026Fall"
   ],
   "motion_example_label_only_on_example_screens": true,
   "film_concept_spelling_corrected": true,
   "caption_max_rows": 2,
   "narration_fade_applied": false,
-  "github_upload_performed": false
+  "github_upload_performed": false,
+  "repository_assignment_folder": "중간고사 대체과제",
+  "repository_previous_assignments_folder": "이전과제"
 }

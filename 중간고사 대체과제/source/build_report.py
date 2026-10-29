@@ -120,7 +120,7 @@ image(O/'assets/film-brand-24.jpg',M,425,CW,210)
 image(O/'assets/film-story-strip.jpg',M,315,CW,95)
 y=294;y=para('지우와 친구는 양과 가격 때문에 주문을 망설인다. 삼번 테이블이 매장이 미리 허용한 메뉴의 공개 조건을 보고 반 접시를 요청한다. 칠번 테이블도 참여해 한 접시 수량이 모이면, 매장이 최종 주문을 수락한 뒤 결제를 확정하고 각각 준비한다. 합석이나 손님 간 음식 분배 없이 필요한 만큼 먹는 경험을 보여준다.',y,size=11,leading=19)
 y=bullet('이유·내용·절차','한 접시와 반 접시의 가격을 비교하고, 허용 메뉴의 조건 공개 → 요청·참여 → 수량 충족 → 매장 최종 수락 → 결제·준비·제공을 이야기로 연결한다. 화면은 가상 이용 시나리오이며 실제 거래 장면이 아니다.',y-10)
-para('엔딩은 영화 장면 뒤에 “돈도, 음식도 아끼는 한 끼”라는 공통 콘셉트과 아끼기·나누기 두 축을 먼저 제시한다. 이후 아끼기부터 시작하는 이유로 이어진다. 이웃의 세일 제보와 매장의 직접 등록을 구분하고, 방문 수요를 확인해 매장 등록·예약으로 확장한 뒤 나누기를 더한다. 세부 주문·결제 절차는 사업 설계에서 다룬다. 생성 영상 특성상 컷 사이 인물·음식 형태에 차이가 있을 수 있다.',y,size=10,leading=17);finish()
+para('엔딩은 영화 장면 뒤에 “돈도, 음식도 아끼는 한 끼”라는 공통 콘셉트와 아끼기·나누기 두 축을 먼저 제시한다. 이후 아끼기부터 시작하는 이유로 이어진다. 이웃의 세일 제보와 매장의 직접 등록을 구분하고, 방문 수요를 확인해 매장 등록·예약으로 확장한 뒤 나누기를 더한다. 세부 주문·결제 절차는 사업 설계에서 다룬다. 생성 영상 특성상 컷 사이 인물·음식 형태에 차이가 있을 수 있다.',y,size=10,leading=17);finish()
 y=start('08 / 제작 과정','장면 설계에서 최종 합성까지','Veo 생성 동영상, 한국어 합성 내레이션, 직접 작성한 그래픽을 편집했다.')
 p=O/'assets/Flow-generation-proof.png';im=Image.open(p);image(p,M,435,CW,210)
 y=414;y=para('Google Flow / Veo 3.1 Lite로 장면별 8초 동영상을 생성했다. 인물의 손짓, 주문 확인, 조리와 음식 집기 등 실제 움직임을 담고, 컷의 의미가 내레이션과 맞도록 필요한 구간을 선택해 편집했다.',y,size=10,leading=17)
@@ -151,7 +151,7 @@ y=table(['평가 기준','본 프로젝트의 접근'],[['참여도','AI 도구�
 y=heading('자료와 제작 자산',y)
 y=para('사업 기획 및 v9 프로토타입: 이예영, BITE 개인 프로젝트.\n동네 정보 공유 참고: 당근 공식 보도자료 “당근 동네백과, 지역생활 지침서 역할 톡톡!”(2024.01.26).\nAI 영상: Google Flow / Veo 3.1 Lite. 로고·그래픽: 프로젝트 자체 설계.\nBGM: ikoliks - Children Ukulele Upbeat Positive Pop Rock (Pixabay Content License).\nBGM: SoundSurfer - Restaurant (Pixabay Content License).\n음원 출처와 라이선스 URL은 source/music-credit.md에 수록했다.',y,size=9,leading=16)
 y=heading('영상과 저장소',y-15)
-for label,rel in [('모션그래픽 보기','https://github.com/Yeyoung-web/2026Fall/blob/main/videos/BITE_MotionGraphic_Branded.mp4'),('AI 영화 보기','https://github.com/Yeyoung-web/2026Fall/blob/main/videos/BITE_AI_Film_Generated_Video.mp4')]:
+for label,rel in [('모션그래픽 보기','https://github.com/Yeyoung-web/2026Fall/blob/main/%EC%A4%91%EA%B0%84%EA%B3%A0%EC%82%AC%20%EB%8C%80%EC%B2%B4%EA%B3%BC%EC%A0%9C/videos/BITE_MotionGraphic_Branded.mp4'),('AI 영화 보기','https://github.com/Yeyoung-web/2026Fall/blob/main/%EC%A4%91%EA%B0%84%EA%B3%A0%EC%82%AC%20%EB%8C%80%EC%B2%B4%EA%B3%BC%EC%A0%9C/videos/BITE_AI_Film_Generated_Video.mp4')]:
  text(M,y,label,11,ORANGE,True);c.linkURL(rel,(M,y-3,M+180,y+14),relative=0);y-=26
 para('GitHub: https://github.com/Yeyoung-web/2026Fall\n제작자: 이예영 / 2021130860',y,size=10,leading=20)
 c.linkURL('https://github.com/Yeyoung-web/2026Fall',(M,y-3,W-M,y+14),relative=0)

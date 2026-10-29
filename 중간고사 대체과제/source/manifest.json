@@ -186,8 +186,8 @@
   },
   {
     "path": "report/BITE_Midterm_Report.pdf",
-    "bytes": 6036123,
-    "sha256": "3f842cae2e379f1a075148ad628de14015a7302ba75a117351cca9c3fa971698"
+    "bytes": 6036278,
+    "sha256": "ce29b99794a6939f449d99cb9fe28401774306e5ea3865255f61db47c7ee30a0"
   },
   {
     "path": "source/audio/ending-0.wav",
@@ -321,8 +321,8 @@
   },
   {
     "path": "source/build_report.py",
-    "bytes": 22693,
-    "sha256": "43db55c691ec31f450bf872bb67df186aec586e6daa9c5e8b0a2659036ff439b"
+    "bytes": 22845,
+    "sha256": "f009b88b375f6e6f159b4e995bcc440f2bfb6b060a8e3dc5048f65f473453e30"
   },
   {
     "path": "source/community_scenes.py",
@@ -376,8 +376,8 @@
   },
   {
     "path": "source/verification.json",
-    "bytes": 867,
-    "sha256": "b6bee05268b0bef30c1bbf103d9955c9c6a5bfacd8d72a271ef3ca4a5cfb1526"
+    "bytes": 1144,
+    "sha256": "4e68532eece0fafbe90796ba742bc850d4ff5091492bb79bfac932909c0036e4"
   },
   {
     "path": "videos/BITE_AI_Film.srt",
